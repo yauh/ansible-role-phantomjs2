@@ -1,0 +1,17 @@
+---
+# tasks file for yauh.phantomjs2
+- name: Check if phantomjs binary exists
+  stat: path=/usr/local/bin/phantomjs
+  register: phantomjs_exists
+
+- name: Grab PhantomJS
+  get_url: url={{ phantomjs2_binary }} dest=/tmp/phantomjs2.zip
+  when: phantomjs_exists.stat.exists == False
+
+- name: Unarchive phantomjs build
+  unarchive: src=/tmp/phantomjs2.zip dest=/usr/local/bin/ copy=no
+  when: phantomjs_exists.stat.exists == False
+
+- name: Make phantomjs executable
+  file: path=/usr/local/bin/phantomjs mode=0755
+  when: phantomjs_exists.stat.exists == False
