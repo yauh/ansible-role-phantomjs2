@@ -1,16 +1,25 @@
 ---
 # tasks file for yauh.phantomjs2
+- name: Install fontconfig
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - fontconfig
+    - libfontconfig
+
 - name: Check if phantomjs binary exists
   stat: path=/usr/local/bin/phantomjs
   register: phantomjs_exists
 
 - name: Grab PhantomJS
-  get_url: url={{ phantomjs2_binary }} dest=/tmp/phantomjs2.zip
+  get_url: url={{ phantomjs2_binary }} dest=/tmp/phantomjs2.tar.bz2
   when: phantomjs_exists.stat.exists == False
 
 - name: Unarchive phantomjs build
-  unarchive: src=/tmp/phantomjs2.zip dest=/usr/local/bin/ copy=no
+  unarchive: src=/tmp/phantomjs2.tar.bz2 dest=/tmp/phantomjs2 copy=no
   when: phantomjs_exists.stat.exists == False
+
+- name: Copy phantomjs binary to /usr/local/bin/
+  command: mv /tmp/phantomjs2/bin/phantomjs /usr/local/bin/phantomjs creates=/usr/local/bin/phantomjs removes=/tmp/phantomjs2/bin/phantomjs
 
 - name: Make phantomjs executable
   file: path=/usr/local/bin/phantomjs mode=0755
