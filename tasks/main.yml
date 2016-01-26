@@ -12,7 +12,7 @@
 
 - name: Grab PhantomJS
   get_url: url={{ phantomjs2_remote_archive }} dest=/tmp/phantomjs2.tar.bz2
-  when: phantomjs_exists.stat.exists == False
+  when: phantomjs_exists.stat.exists == False || phantomjs2_force_install == True
 
 - name: Unarchive phantomjs build
   unarchive: src=/tmp/phantomjs2.tar.bz2 dest=/tmp/ copy=no
