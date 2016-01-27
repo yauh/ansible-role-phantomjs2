@@ -12,7 +12,7 @@
 
 - name: Grab PhantomJS
   get_url: url={{ phantomjs2_remote_archive }} dest=/tmp/phantomjs2.tar.bz2
-  when: (phantomjs_exists.stat.exists == False) or (phantomjs2_force_install == True)
+  when: phantomjs2_force_install == True or phantomjs_exists.stat.exists == False
 
 - name: Unarchive phantomjs build
   unarchive: src=/tmp/phantomjs2.tar.bz2 dest=/tmp/ copy=no
@@ -24,3 +24,7 @@
 - name: Make phantomjs executable
   file: path=/usr/local/bin/phantomjs mode=0755
   when: phantomjs_exists.stat.exists == False
+
+- name: Create script to kill old zombie phantom processes
+  template: src=killphantomzombies.sh.j2 dest=/etc/cron.hourly/killphantomzombies owner=root mode=0755
+  become: yes

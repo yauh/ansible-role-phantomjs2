@@ -1,5 +1,6 @@
 ---
 # defaults file for yauh.phantomjs2
-phantomjs2_force_install: false
+phantomjs2_force_install: True
 phantomjs2_release: phantomjs-2.1.1-linux-x86_64
 phantomjs2_remote_archive: "https://bitbucket.org/ariya/phantomjs/downloads/{{phantomjs2_release}}.tar.bz2"
+phantomjs2_max_ttl: 1h # kill all phantomjs instances older than this time to live
